@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PharmD Cardiac Phase Lab</title>
+    <style>
+        /* This makes it look like a real app without needing extra files */
+        body { font-family: sans-serif; background-color: #f0f4f8; padding: 20px; color: #333; }
+        .app-container { max-width: 600px; margin: 0 auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { color: #c0392b; text-align: center; }
+        .input-box { text-align: center; margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 10px; }
+        input { font-size: 1.5rem; width: 100px; text-align: center; border: 2px solid #c0392b; border-radius: 5px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.9rem; }
+        th { background-color: #c0392b; color: white; padding: 10px; border: 1px solid #ddd; }
+        td { padding: 8px; border: 1px solid #ddd; text-align: center; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .total-row { font-weight: bold; background-color: #eee !important; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <h1>Cardiac Phase Calculator</h1>
+    <p style="text-align: center;">Enter Heart Rate to see phase durations for 6 and 7 cycles.</p>
+
+    <div class="input-box">
+        <label>Heart Rate (BPM): </label>
+        <input type="number" id="bpm" value="75" oninput="calculate()">
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>7 Stages</th>
+                <th>1 Cycle</th>
+                <th>6 Cycles</th>
+                <th>7 Cycles</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            </tbody>
+    </table>
+</div>
+
+<script>
+    function calculate() {
+        const hr = document.getElementById('bpm').value;
+        if (hr <= 0) return;
+
+        const totalCycle = 60 / hr;
+        const ratio = totalCycle / 0.8; // Scaling based on your 0.8s baseline
+
+        const stages = [
+            { name: "1. Isovol. Vent. Contraction", t: 0.03 },
+            { name: "2. Rapid Vent. Ejection", t: 0.08 },
+            { name: "3. Slow Vent. Ejection", t: 0.16 },
+            { name: "4. Isovol. Vent. Relaxation", t: 0.05 },
+            { name: "5. Rapid Vent. Filling", t: 0.16 },
+            { name: "6. Slow Vent. Filling", t: 0.18 },
+            { name: "7. Atrial Contraction", t: 0.14 }
+        ];
+
+        let rows = "";
+        stages.forEach(s => {
+            const s1 = s.t * ratio;
+            rows += `<tr>
+                <td style="text-align:left">${s.name}</td>
+                <td>${s1.toFixed(3)}s</td>
+                <td>${(s1 * 6).toFixed(3)}s</td>
+                <td>${(s1 * 7).toFixed(3)}s</td>
+            </tr>`;
+        });
+
+        // Add Total Row
+        rows += `<tr class="total-row">
+            <td>TOTAL DURATION</td>
+            <td>${totalCycle.toFixed(3)}s</td>
+            <td>${(totalCycle * 6).toFixed(3)}s</td>
+            <td>${(totalCycle * 7).toFixed(3)}s</td>
+        </tr>`;
+
+        document.getElementById('tableBody').innerHTML = rows;
+    }
+
+    // Run once on startup
+    calculate();
+</script>
+
+</body>
+</html>

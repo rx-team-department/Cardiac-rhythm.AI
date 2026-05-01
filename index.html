@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardiac Lab | M. Rizwan & Dr. Ihtisham Umar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --medical-red: #8b0000;
+            --gold: #d4af37;
+            --dark-bg: #0f172a;
+            --card-bg: #ffffff;
+        }
+
+        * { box-sizing: border-box; transition: all 0.3s ease; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background-color: #f1f5f9; color: #1e293b; }
+
+        header {
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 100%);
+            color: white;
+            padding: 70px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--gold);
+        }
+
+        .heart-pulse {
+            font-size: 50px;
+            animation: beat 1s infinite;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        @keyframes beat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.25); }
+            30% { transform: scale(1); }
+        }
+
+        h1 { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin: 0; letter-spacing: 1px; }
+        
+        /* Highlighted Board Styling */
+        .credit-board {
+            margin-top: 25px;
+            display: inline-block;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            backdrop-filter: blur(5px);
+        }
+
+        .dev-badge {
+            color: var(--gold);
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: block;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .sup-badge {
+            color: #ffffff;
+            font-weight: 400;
+            font-size: 1rem;
+            display: block;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 5px;
+            font-style: italic;
+        }
+
+        .uni-name {
+            opacity: 0.8;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+        }
+
+        /* Main UI */
+        .main-content { max-width: 900px; margin: -40px auto 50px; padding: 0 20px; }
+        .card { 
+            background: var(--card-bg); 
+            border-radius: 16px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+            padding: 40px;
+            border-top: 5px solid var(--medical-red);
+        }
+
+        .input-wrapper { text-align: center; margin-bottom: 30px; }
+        input {
+            width: 160px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 2.2rem;
+            text-align: center;
+            font-weight: 700;
+            color: var(--medical-red);
+            background: #fff;
+        }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background-color: #f8fafc; color: #475569; padding: 18px; text-align: left; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; font-size: 0.8rem; }
+        td { padding: 16px; border-bottom: 1px solid #f1f5f9; }
+        .stage-name { font-weight: 600; color: #334155; }
+        .val-cell { font-family: 'Courier New', monospace; font-weight: bold; color: var(--medical-red); text-align: right; }
+
+        footer { background: var(--dark-bg); color: #94a3b8; padding: 50px 20px; text-align: center; border-top: 5px solid var(--gold); }
+        .contact-link { color: var(--gold); text-decoration: none; font-weight: bold; }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="heart-pulse">❤️</div>
+    <h1>Cardiac Cycle Analysis</h1>
+    
+    <div class="credit-board">
+        <span class="dev-badge">Developed by: Muhammad Rizwan</span>
+        <span class="sup-badge">Supervised by: Dr. Ihtisham Umar</span>
+    </div>
+
+    <div class="uni-name">
+        COMSATS University Islamabad, Lahore Campus<br>
+        Department of Pharmacy (PharmD)
+    </div>
+</header>
+
+<div class="main-content">
+    <div class="card">
+        <div class="input-wrapper">
+            <label style="display:block; margin-bottom:10px; font-weight:600; color:#64748b;">Subject Heart Rate (BPM)</label>
+            <input type="number" id="bpmInput" value="75" oninput="calculate()">
+            <div id="status-tag" style="margin-top:10px; font-weight:bold; font-size:0.8rem;"></div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cardiac Stage</th>
+                        <th style="text-align: right;">Duration (sec)</th>
+                    </tr>
+                </thead>
+                <tbody id="resultBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>PharmD Academic Resource | Developed with Professional Care</p>
+    <p>Contact: <a href="mailto:fa25-phm-072@cuilahore.edu.pk" class="contact-link">fa25-phm-072@cuilahore.edu.pk</a></p>
+    <h2 style="color: white; margin-top: 20px;">Best of Luck!</h2>
+</footer>
+
+<script>
+    function calculate() {
+        const hr = document.getElementById('bpmInput').value;
+        const status = document.getElementById('status-tag');
+        const pulse = document.querySelector('.heart-pulse');
+        
+        if (hr <= 0 || !hr) return;
+
+        pulse.style.animationDuration = (60/hr) + 's';
+        
+        if(hr < 60) { status.innerText = "STATUS: BRADYCARDIA"; status.style.color = "#3b82f6"; }
+        else if(hr > 100) { status.innerText = "STATUS: TACHYCARDIA"; status.style.color = "#ef4444"; }
+        else { status.innerText = "STATUS: NORMAL SINUS RHYTHM"; status.style.color = "#10b981"; }
+
+        const totalDuration = 60 / hr;
+        const scale = totalDuration / 0.8;
+
+        const stages = [
+            "Isovolumetric ventricular contraction",
+            "Rapid ventricular ejection phase",
+            "Slow ventricular ejection phase",
+            "Isovolumetric ventricular relaxation",
+            "Rapid (passive) ventricular filling",
+            "Slow ventricular filling (diastasis)",
+            "Atrial contraction"
+        ];
+        const times = [0.03, 0.08, 0.16, 0.05, 0.16, 0.18, 0.14];
+
+        let html = "";
+        stages.forEach((name, i) => {
+            html += `<tr>
+                <td class="stage-name">${i+1}. ${name}</td>
+                <td class="val-cell">${(times[i] * scale).toFixed(3)} s</td>
+            </tr>`;
+        });
+
+        html += `<tr style="background: #fff5f5; font-weight: 800; border-top: 2px solid var(--medical-red);">
+            <td>TOTAL CARDIAC CYCLE</td>
+            <td class="val-cell" style="color: #000;">${totalDuration.toFixed(3)} s</td>
+        </tr>`;
+
+        document.getElementById('resultBody').innerHTML = html;
+    }
+    calculate();
+</script>
+
+</body>
+</html>
